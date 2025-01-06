@@ -16,7 +16,7 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 wasm-bindgen = { version = "0.2" }
-pitch-detection = { version = "0.3" }
+rustfft = { version = "6.0.1", default-features = false }
 console_error_panic_hook = { version = "0.1.7", optional = true }
 
 [dev-dependencies]
