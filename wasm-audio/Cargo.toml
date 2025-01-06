@@ -1,0 +1,38 @@
+[package]
+name = "wasm-audio"
+edition = "2021"
+version = "0.1.0"
+authors = ["Will Hedgecock <will.hedgecock@gmail.com>"]
+license = "MIT"
+description = ""
+documentation = "https://github.com/hedgetechllc/wasm-audio-app"
+readme = "README.md"
+homepage = "https://github.com/hedgetechllc/wasm-audio-app"
+repository = "https://github.com/hedgetechllc/wasm-audio-app"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+wasm-bindgen = { version = "0.2" }
+pitch-detection = { version = "0.3" }
+console_error_panic_hook = { version = "0.1.7", optional = true }
+
+[dev-dependencies]
+wasm-bindgen-test = { version = "0.3" }
+
+[features]
+default = ["console_error_panic_hook"]
+
+[profile.release]
+codegen-units = 1
+debug = false
+debug-assertions = false
+incremental = false
+lto = true
+opt-level = "s"
+overflow-checks = false
+panic = "abort"
+rpath = false
+strip = "symbols"
