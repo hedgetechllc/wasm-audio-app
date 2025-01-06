@@ -56,12 +56,8 @@ pub fn detect_peaks(arr: &[f32]) -> impl Iterator<Item = (usize, f32)> + '_ {
   PeaksIter::new(arr)
 }
 
-pub fn choose_peak<I: Iterator<Item = (usize, f32)>>(
-  mut peaks: I,
-  threshold: f32,
-  threshold2: f32,
-) -> Option<(usize, f32)> {
-  peaks.find(|p| p.1 > threshold && p.1 > threshold2)
+pub fn choose_peak(peaks: Vec<(usize, f32)>, threshold: f32, threshold2: f32) -> Option<(usize, f32)> {
+  peaks.into_iter().find(|p| p.1 > threshold && p.1 > threshold2)
 }
 
 pub fn correct_peak(peak: (usize, f32), data: &[f32]) -> (f32, f32) {

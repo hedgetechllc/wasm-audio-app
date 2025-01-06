@@ -57,8 +57,11 @@ fn autocorrelation(
 }
 
 fn pitch_from_peaks(input: &[f32], sample_rate: f32, clarity_threshold: f32, pick_threshold: f32) -> Option<f32> {
-  let peaks2 = detect_peaks(input);
-  let thresh = match peaks2.max_by(|x, y| x.1.partial_cmp(&y.1).unwrap_or(Ordering::Equal)) {
+  let peaks: Vec<(usize, f32)> = detect_peaks(input).collect();
+  let thresh = match peaks
+    .iter()
+    .max_by(|x, y| x.1.partial_cmp(&y.1).unwrap_or(Ordering::Equal))
+  {
     None => 0.0,
     Some(peak) => peak.1 * pick_threshold,
   };
