@@ -1,3 +1,8 @@
+#![no_std]
+
+#[macro_use]
+extern crate alloc;
+
 mod pitch;
 
 use pitch::PitchDetector;

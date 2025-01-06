@@ -1,15 +1,13 @@
 //! The `McLeod Pitch Detection Algorithm` is based on the algorithm from the paper
 //! *[A Smarter Way To Find Pitch](https://www.researchgate.net/publication/230554927_A_smarter_way_to_find_pitch)*.
 
-extern crate alloc;
-
 mod peak;
 
 use rustfft::num_complex::Complex;
 use rustfft::num_traits::Zero;
 use rustfft::{Fft, FftPlanner};
 
-use alloc::sync::Arc;
+use alloc::{sync::Arc, vec::Vec};
 use core::cmp::Ordering;
 use peak::{choose_peak, correct_peak, detect_peaks};
 

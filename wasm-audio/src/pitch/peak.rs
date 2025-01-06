@@ -1,5 +1,4 @@
-use core::f32;
-
+use alloc::vec::Vec;
 use rustfft::num_traits::FromPrimitive;
 
 struct PeaksIter<'a> {
