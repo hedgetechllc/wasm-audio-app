@@ -1,4 +1,4 @@
-//! The `McLeod Pitch Detection Algorithm` is based on the algorithm from the paper
+//! The `McLeod Pitch Detection Algorithm` is based on the algorithm from the paper:
 //! *[A Smarter Way To Find Pitch](https://www.researchgate.net/publication/230554927_A_smarter_way_to_find_pitch)*.
 
 mod peak;
@@ -92,7 +92,6 @@ fn normalized_square_difference(
 }
 
 pub struct PitchDetector {
-  size: usize,
   signal_complex: Vec<Complex<f32>>,
   scratch: Vec<f32>,
   scratch_complex: Vec<Complex<f32>>,
@@ -105,7 +104,6 @@ impl PitchDetector {
   pub fn new(size: usize, padding: usize) -> Self {
     let mut planner = FftPlanner::new();
     Self {
-      size,
       signal_complex: vec![Complex::zero(); size + padding],
       scratch: vec![f32::zero(); size + padding],
       scratch_complex: vec![Complex::zero(); size + padding],
@@ -123,8 +121,6 @@ impl PitchDetector {
     confidence_percent_threshold: f32,
     pick_threshold: f32,
   ) -> Option<f32> {
-    assert_eq!(signal.len(), self.size);
-
     if square_sum(signal) < power_threshold {
       None
     } else {
