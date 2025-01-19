@@ -39,5 +39,16 @@ export async function setupAudio(onPitchDetectedCallback) {
   // Connect the audio source to the pitch detection node and then to the output
   audioSource.connect(pitchNode);
   pitchNode.connect(context.destination);
-  return { context, pitchNode };
+  return { context, pitchNode, mediaStream };
+}
+
+export async function stopAudio(audio) {
+  if (audio) {
+    audio.context.close();
+    audio.mediaStream.getAudioTracks().forEach(track => {
+      track.stop();
+      audio.mediaStream.removeTrack(track);
+    });
+  }
+  return undefined;
 }

@@ -1,75 +1,58 @@
-import React from "react";
-import PropTypes from 'prop-types';
-import { setupAudio } from "./setupAudio";
+import React, { useState } from "react";
+import { setupAudio, stopAudio } from "./setupAudio";
+import { CircleChart } from './displays/circle';
+import { LinearChart } from "./displays/line";
 import "./App.css";
 
-function PitchReadout({ running, latestPitch }) {
-  return (
-    <div className="Pitch-readout">
-      {
-        latestPitch
-           ? `Latest pitch: ${latestPitch.toFixed(1)} Hz`
-           : running ? "Listening..." : "Paused"
-      }
-    </div>
-  );
-}
-
-PitchReadout.propTypes = {
-  running: PropTypes.bool.isRequired,
-  latestPitch: PropTypes.number
-};
-
-function AudioRecorderControl() {
-  // Retrieve latest app states
-  const [audio, setAudio] = React.useState(undefined);
-  const [running, setRunning] = React.useState(false);
-  const [latestPitch, setLatestPitch] = React.useState(undefined);
-
-  // Initialize the Web Audio API one-time only
-  if (!audio) {
-    return (
-      <button
-        onClick={async () => {
-          setAudio(await setupAudio(setLatestPitch));
-          setRunning(true);
-        }}
-      >
-        Start listening
-      </button>
-    );
-  }
-
-  // Suspend or resume pitch detection based on the current state
-  const { context } = audio;
-  return (
-    <div>
-      <button
-        onClick={async () => {
-          if (running) {
-            await context.suspend();
-          } else {
-            await context.resume();
-          }
-          setRunning(context.state === "running");
-        }}
-        disabled={context.state !== "running" && context.state !== "suspended"}
-      >
-        {running ? "Pause" : "Resume"}
-      </button>
-      <PitchReadout running={running} latestPitch={latestPitch} />
-    </div>
-  );
-}
-
 function App() {
+  const [content, setContent] = useState(undefined);
+  const [audio, setAudio] = useState(undefined);
+  const [running, setRunning] = useState(false);
+  const [latestPitch, setLatestPitch] = useState(440);
+
+  React.useEffect(() => {
+    if (running)
+      setupAudio(setLatestPitch).then(setAudio);
+    else
+      stopAudio(audio).then(setAudio);
+  }, [running]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        Wasm Audio Tutorial
-      </header>
+      <div className="App-nav">
+        <div className="App-header">
+          Interface Options
+        </div>
+        <div className="App-controls">
+          <button onClick={() => {setContent('circular');}}>
+            Circular Visualizer
+          </button>
+          <button onClick={() => {setContent('linear');}}>
+            Line Visualizer
+          </button>
+          <button onClick={() => {setContent('note');}}>
+            Note Detector
+          </button>
+        </div>
+        <div className="Audio-controls">
+          <button className="play" onClick={() => {setRunning(!running);}}>
+            {running ? 'Stop' : 'Start'}
+          </button>
+        </div>
+      </div>
       <div className="App-content">
-        <AudioRecorderControl />
+        {(() => {
+          switch (content) {
+            case 'circular':
+              return <CircleChart latestPitch={latestPitch} />;
+            case 'linear':
+              return <LinearChart latestPitch={latestPitch} />;
+            case 'note':
+              return <span className="instruction">Not yet implemented...</span>;
+            default:
+              return <span className="instruction">Select a demo interface from the left...</span>;
+          }
+        })()}
       </div>
     </div>
   );
