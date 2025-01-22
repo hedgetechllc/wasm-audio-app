@@ -40,9 +40,12 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: wasm32-unknown-unknown, x86_64-unknown-none
+      - name: Install WASM-Pack
+        uses: jetli/wasm-pack-action@v0.4.0
+        with:
+          version: 'latest'
       - name: Build app
         run: |
-          cargo install wasm-pack
           cd wasm-audio && wasm-pack build --release --target web -- --no-default-features && cp -R pkg ../public/wasm-audio
           npm run build
       - name: Upload artifact
