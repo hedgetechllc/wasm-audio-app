@@ -12,6 +12,7 @@ dev : clean
 clean :
 	rm -rf public/wasm-audio
 	rm -rf wasm-audio/pkg
+	rm -rf dist
 	cd wasm-audio && cargo clean
 
 distclean : clean
