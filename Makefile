@@ -3,6 +3,7 @@
 all : clean
 	cd wasm-audio && wasm-pack build --release --target web -- --no-default-features && cp -R pkg ../public/wasm-audio
 	npm run build
+	npm run dev
 
 dev : clean
 	cd wasm-audio && wasm-pack build --dev --target web && cp -R pkg ../public/wasm-audio
